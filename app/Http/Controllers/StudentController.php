@@ -30,24 +30,25 @@ class StudentController extends Controller
      */
     public function store(Request $request)
     {
-        $studentGroup = $request->input('group');
-        $studentSurname = $request->input('surname');
-        $studentName = $request->input('name');
-        $studentCreateDate = $request->input('group_create');
-        $studentUpdateDate = $request->input('group_update');
-        DB::insert('insert into students (group_id, surname, name, created_at, updated_at) values( ?,?,?,?,?)', [$studentGroup, $studentSurname, $studentName, $studentCreateDate, $studentUpdateDate]);
-        return redirect()->action([GroupController::class, 'show'], ['group' =>  $studentGroup]);;
+        $student = new Student();
+        $student->fill([
+            'group_id' =>$request->input('group'),
+            'surname' => $request->input('surname'),
+            'name' => $request->input('name'),
+            'created_at' => $request->input('group_create'),
+            'updated_at' => $request->input('group_update'),
+        ]);
+        $student->save();
+
+        return redirect()->action([GroupController::class, 'show'], ['group' =>  $request->input('group')]);;
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Student $student)
+    public function show(Group $group, Student $student)
     {
-        $students = DB::table('students')
-        ->where('id', '=', $student->id)
-        ->get();
-        return view('showStudent', ['student' => $students]);
+        return view('showStudent', ['student' => $student]);
     }
 
     /**

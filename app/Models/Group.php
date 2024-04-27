@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class Group extends Model
 {
     use HasFactory;
+    protected $fillable = ['title','start_from', 'is_active'];
     public function students(): HasMany
     {
         $this->hasMany(Student::class);
